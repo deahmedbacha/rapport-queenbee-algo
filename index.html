@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Démonstration de l’algorithme de Dijkstra sur le graphe QueenBee SN-CASA.">
+  <title>QueenBee — Dijkstra</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23111111'/%3E%3Cpath d='M9 7h9a6 6 0 0 1 0 12h-3l7 6h-7l-6-6z' fill='%23ed4444'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a class="skip" href="#demo">Aller au graphe</a>
+  <header>
+    <a class="brand" href="#">QueenBee <span>/ Dijkstra</span></a>
+    <div class="header-links"><span>INGETIS / ITIS</span><a class="report-link" href="./rapport-queenbee.pdf" target="_blank" rel="noopener">Rapport PDF ↗</a><a class="download-demo" href="./queenbee-demo.html" download="QueenBee_Demo_Dijkstra.html">Télécharger la démo ↓</a></div>
+  </header>
+  <main>
+    <div class="page-title"><h1>Itinéraire d’urgence</h1><p>Yaya Mohamedhen · Djamel Eddine Ahmed Bacha <span>— Développement / DevOps</span></p></div>
+    <form id="routing-form" class="controls">
+      <div class="field"><label for="start-select">Départ</label><select id="start-select"><option value="COORD-SN-CASA">Base du coordinateur</option><option value="P1">Carrefour P1</option><option value="P2">Carrefour P2</option><option value="P3">Carrefour P3</option><option value="P4">Carrefour P4</option><option value="P5">Carrefour P5</option><option value="P6">Carrefour P6</option><option value="SN-CASA-014">Ruche 014</option></select></div>
+      <div class="field"><label for="target-select">Ruche d’arrivée</label><select id="target-select"><option value="SN-CASA-014">014 — Alerte critique</option><option value="SN-CASA-001">001</option><option value="SN-CASA-002">002</option><option value="SN-CASA-003">003</option><option value="SN-CASA-004">004</option><option value="SN-CASA-005">005</option><option value="SN-CASA-099">099 — Inaccessible</option></select></div>
+      <button class="primary" type="submit">Calculer le trajet</button><button id="reset-button" type="button">Réinitialiser</button>
+      <div class="examples"><span>Exemples :</span><button id="scenario-alert" type="button">Base → ruche 014</button><button id="scenario-isolated" type="button">Ruche inaccessible</button></div>
+    </form>
+    <section id="demo" class="demo" aria-label="Calcul d’itinéraire sur le site SN-CASA">
+      <div class="graph-column"><div class="graph-heading"><h2>SN-CASA <span>Casamance, Sénégal</span></h2><span>14 sommets · 17 pistes</span></div>
+        <svg id="network" viewBox="0 0 840 495" role="group" aria-label="Graphe du site SN-CASA. Cliquez sur une ruche pour la choisir."><g id="graph-edges"></g><g id="graph-labels"></g><g id="graph-nodes"></g></svg>
+        <div class="legend"><span><i class="legend-source"></i>Départ</span><span><i class="legend-route"></i>Chemin optimal</span><span><i class="legend-visited"></i>Visité</span><span>Poids = minutes</span></div>
+      </div>
+      <aside class="result-panel" aria-live="polite"><h2 id="result-title">Résultat</h2><div class="cost"><strong id="total-cost">17</strong><span id="cost-unit">min</span></div><p id="result-details">6 tronçons · 7 points de passage</p><div class="result-divider"></div><h3>Chemin</h3><div id="route-nodes">Base → P1 → P2 → P4 → P6 → P5 → Ruche 014</div><button id="copy-route" class="small-button" type="button">Copier le chemin</button><div class="result-divider"></div><div class="time"><span>Temps de calcul local</span><strong id="compute-time">—</strong></div><p class="result-note" id="result-note">Le trajet le plus rapide peut passer par un détour.</p></aside>
+    </section>
+    <div class="playback"><div class="playback-buttons"><button id="animate-button" type="button">Animer</button><button id="step-button" type="button">Pas à pas</button></div><div class="step-status"><strong id="step-title">Chemin optimal : 17 minutes.</strong><span id="step-caption">Cliquez sur Animer pour suivre les étapes.</span></div></div>
+    <details class="algorithm-details" id="algorithm-details"><summary>Détails de l’algorithme</summary><div class="algorithm-content"><div class="pseudocode" aria-label="Pseudocode de Dijkstra"><div data-code="init"><span>1</span><code>distance[départ] = 0</code></div><div data-code="init"><span>2</span><code>tas.ajouter(0, départ)</code></div><div data-code="visit"><span>3</span><code>tant que le tas n’est pas vide :</code></div><div data-code="visit"><span>4</span><code>  coût, point = tas.extraire_min()</code></div><div data-code="relax"><span>5</span><code>  pour chaque voisin du point :</code></div><div data-code="relax"><span>6</span><code>    si le trajet est plus court :</code></div><div data-code="relax"><span>7</span><code>      actualiser distance et prédécesseur</code></div><div data-code="relax"><span>8</span><code>      tas.ajouter(distance, voisin)</code></div><div data-code="done"><span>9</span><code>reconstituer le chemin</code></div></div><div class="queue"><h3>File de priorité <span id="queue-count">0 élément</span></h3><div id="queue-items"></div><p>Tas binaire et Dijkstra codés à la main.<br>Complexité sur un graphe simple : <code>O((V + E) log V)</code>.</p></div></div></details>
+    <footer><p>Démo JavaScript · Code Python et API FastAPI dans le rapport.</p><span class="report-caption">Projet d’algorithmique · UC-C01</span></footer>
+  </main>
+  <div id="toast" role="status"></div>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
